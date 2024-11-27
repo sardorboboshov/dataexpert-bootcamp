@@ -1,7 +1,11 @@
+do
+$$
+begin
+    for _year in 1969..2020 loop
 INSERT INTO actors
 with last_year AS (
     SELECT * FROM actors
-    WHERE current_year = 1969
+    WHERE current_year = _year
 ),
     this_year AS (
     SELECT
@@ -11,7 +15,7 @@ with last_year AS (
         ARRAY_AGG(ROW(film, votes, rating, filmid)::films) AS films,
         AVG(rating) AS avg_rating
     FROM actor_films
-    where year = 1970
+    where year = _year + 1
     GROUP BY actor, actorid, year
     )
 SELECT
@@ -40,3 +44,6 @@ SELECT
 
 
 FROM last_year ly FULL OUTER JOIN this_year ty on ly.actorid = ty.actorid;
+end loop;
+end;
+$$;
