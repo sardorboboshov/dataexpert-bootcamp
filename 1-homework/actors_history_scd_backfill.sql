@@ -9,7 +9,7 @@ WITH with_previous AS (SELECT actor,
                                       LAG(is_active, 1) OVER (PARTITION BY actorid ORDER BY current_year)
                                           as previous_is_active
                                from actors
-                               where current_year <= 2022),
+                               where current_year <= 2021),
             with_indicators AS (
                 SELECT *,
                        CASE
@@ -32,7 +32,7 @@ WITH with_previous AS (SELECT actor,
                quality_class,
                min(current_year) as start_date,
                max(current_year) as end_date,
-               2022 as current_year
+               2021 as current_year
         from with_streaks
         group by actor, actorid, streak_identifier, is_active, quality_class
         order by actor, streak_identifier;
